@@ -1,6 +1,6 @@
 FROM frolvlad/alpine-oraclejdk8:slim
 
-RUN apt-get update && apt-get install bash
+RUN apk add --update bash
 
 ADD . /app
 RUN sh -c 'chmod +x /app/gradlew'
