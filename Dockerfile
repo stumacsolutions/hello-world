@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-oraclejdk8:slim
 
 ADD . /app
-RUN sh -c 'ls -la /app'
+RUN sh -c 'ln -s /bin/bash /bin/sh'
 RUN sh -c 'chmod +x /app/gradlew'
 RUN sh -c '/app/gradlew build'
 RUN sh -c 'cp /app/build/libs/hello-world-latest.jar /app.jar'
