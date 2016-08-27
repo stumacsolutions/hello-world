@@ -1,12 +1,10 @@
-FROM frolvlad/alpine-oraclejdk8:slim
-
-RUN apk add --update bash
-
-ADD . /app
-RUN sh -c 'chmod +x /app/gradlew'
-RUN sh -c '/app/gradlew build'
-RUN sh -c 'cp /app/build/libs/hello-world-latest.jar /app.jar'
-RUN sh -c 'touch /app.jar'
+FROM java:openjdk-8
 
 VOLUME /tmp
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+ADD . /tmp
+
+RUN sh -c 'cd /tmp && ./gradlew build --stacktrace'
+RUN sh -c 'cp /tmp/build/libs/hello-world-latest.jar /app.jar'
+RUN sh -c 'touch /app.jar'
+
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
