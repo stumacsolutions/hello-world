@@ -1,12 +1,9 @@
 FROM java:openjdk-8
 
 VOLUME /tmp
-ADD . /tmp
 
-RUN cd /tmp && chmod +x gradlew && ./gradlew build
-RUN ls /
-RUN ls ~
-RUN cp /tmp/build/libs/hello-world-latest.jar /app.jar
-RUN touch /app.jar
+ADD . /app
+RUN cd /app && chmod +x gradlew && ./gradlew build
+RUN cp /app/build/libs/hello-world-latest.jar /app.jar
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
