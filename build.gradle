@@ -16,7 +16,6 @@ apply plugin: 'spring-boot'
 
 jar {
     baseName = 'hello-world'
-    version =  'latest'
 }
 
 repositories {
