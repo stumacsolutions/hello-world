@@ -8,6 +8,7 @@ buildscript {
     }
 }
 
+apply plugin: 'checkstyle'
 apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'jacoco'
 apply plugin: 'java'
