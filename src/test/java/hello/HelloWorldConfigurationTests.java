@@ -46,5 +46,6 @@ public class HelloWorldConfigurationTests
         ResponseEntity<String> entity = restTemplate
                 .getForEntity("http://localhost:" + this.port + "/", String.class);
         assertEquals(OK, entity.getStatusCode());
+		assertEquals("Hello World!", entity.getBody());
     }
 }

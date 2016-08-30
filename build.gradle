@@ -39,6 +39,11 @@ jar {
     version = 'latest'
 }
 
+pitest {
+    coverageThreshold = 50
+	mutationThreshold = 90
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
