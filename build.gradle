@@ -14,10 +14,6 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-jar {
-    baseName = 'hello-world'
-}
-
 repositories {
     mavenCentral()
 }
