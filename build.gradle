@@ -3,26 +3,21 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
         classpath('info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10')
+		classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
     }
 }
-
-apply plugin: 'checkstyle'
-apply plugin: 'info.solidsoft.pitest'
-apply plugin: 'jacoco'
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
 
 repositories {
     mavenCentral()
 }
 
-jar {
-    baseName = 'hello-world'
-    version = 'latest'
-}
+apply plugin: 'checkstyle'
+apply plugin: 'idea'
+apply plugin: 'info.solidsoft.pitest'
+apply plugin: 'jacoco'
+apply plugin: 'java'
+apply plugin: 'spring-boot'
 
 group = 'hello'
 version = 'latest'
@@ -36,6 +31,11 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+jar {
+    baseName = 'hello-world'
+    version = 'latest'
 }
 
 task wrapper(type: Wrapper) {
