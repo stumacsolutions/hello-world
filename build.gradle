@@ -13,6 +13,7 @@ repositories {
 }
 
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 apply plugin: 'idea'
 apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'jacoco'
