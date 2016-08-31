@@ -42,7 +42,7 @@ jar {
 }
 
 pitest {
-    coverageThreshold = 50
+    coverageThreshold = 50 // increase threshold when there is more code
     mutationThreshold = 90
 }
 
