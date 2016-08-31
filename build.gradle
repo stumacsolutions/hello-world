@@ -55,7 +55,7 @@ task cucumber(type: Test) {
     include 'acceptance/**'
 }
 
-task docker {
+task docker(dependsOn: assemble) {
   doLast {
     exec {
       commandLine 'cmd', 'c', 'docker build -t stumacsolutions/hello-world-container .'
