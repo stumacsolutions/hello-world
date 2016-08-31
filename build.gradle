@@ -4,7 +4,8 @@ buildscript {
     }
     dependencies {
         classpath('info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10')
-		classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
 
@@ -13,6 +14,7 @@ repositories {
 }
 
 apply plugin: 'checkstyle'
+apply plugin: 'docker'
 apply plugin: 'findbugs'
 apply plugin: 'idea'
 apply plugin: 'info.solidsoft.pitest'
@@ -41,7 +43,13 @@ jar {
 
 pitest {
     coverageThreshold = 50
-	mutationThreshold = 90
+    mutationThreshold = 90
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    applicationName = jar.baseName
+    dockerfile = file('Dockerfile')
+    push = true
 }
 
 task wrapper(type: Wrapper) {
