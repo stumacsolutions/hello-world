@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-oraclejdk8:slim
 VOLUME /tmp
 
-ADD hello-world-latest.jar app.jar
+ADD buid/libs/hello-world-latest.jar app.jar
 RUN sh -c 'touch /app.jar'
 
 ENV SERVER_PORT=80
