@@ -41,6 +41,6 @@ public class HelloWorldSteps
     {
         assertNotNull(response);
         assertEquals(OK, response.getStatusCode());
-        assertEquals("Hello World!", response.getBody());
+        assertEquals("Hello, World!", response.getBody());
     }
 }
