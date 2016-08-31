@@ -47,9 +47,15 @@ pitest {
 }
 
 task docker(type: Docker, dependsOn: assemble) {
-    applicationName = jar.baseName
-    dockerfile = file('Dockerfile')
-    push = true
+  push = true
+  applicationName = jar.baseName
+  dockerfile = file('Dockerfile')
+  doFirst {
+    copy {
+      from jar
+      into stageDir
+    }
+  }
 }
 
 task wrapper(type: Wrapper) {
