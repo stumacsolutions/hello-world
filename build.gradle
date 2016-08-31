@@ -33,6 +33,9 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('info.cukes:cucumber-java:1.2.4')
+    testCompile('info.cukes:cucumber-junit:1.2.4')
+    testCompile('info.cukes:cucumber-spring:1.2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
@@ -44,6 +47,14 @@ jar {
 pitest {
     coverageThreshold = 50 // increase threshold when there is more code
     mutationThreshold = 90
+}
+
+test {
+    exclude 'acceptance/**'
+}
+
+task cucumber(type: Test) {
+    include 'acceptance/**'
 }
 
 task docker(type: Docker, dependsOn: assemble) {
