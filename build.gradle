@@ -69,6 +69,17 @@ task docker(dependsOn: assemble) {
   }
 }
 
+task tag() {
+    doLast {
+        exec {
+            commandLine 'git', 'tag', System.getenv('SNAP_PIPELINE_COUNTER')
+        }
+        exec {
+            commandLine 'git', 'push', 'origin', System.getenv('SNAP_PIPELINE_COUNTER')
+        }
+    }
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
