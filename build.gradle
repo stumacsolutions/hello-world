@@ -61,7 +61,7 @@ task docker(dependsOn: assemble) {
       commandLine 'docker', 'build', '-t', 'stumacsolutions/hello-world-container', '.'
     }
     exec {
-      commandLine 'docker', 'login', '-e', getenv('DOCKER_EMAIL'), '-u', getenv('DOCKER_USER'), '-p', getenv('eDOCKER_PASS')
+      commandLine 'docker', 'login', '-e', System.getenv('DOCKER_EMAIL'), '-u', System.getenv('DOCKER_USER'), '-p', System.getenv('eDOCKER_PASS')
     }
     exec {
       commandLine 'docker', 'push', 'stumacsolutions/hello-world-container'
