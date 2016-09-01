@@ -58,13 +58,13 @@ task cucumber(type: Test) {
 task docker(dependsOn: assemble) {
   doLast {
     exec {
-      commandLine 'cmd', '-c', 'docker build -t stumacsolutions/hello-world-container .'
+      commandLine 'docker build -t stumacsolutions/hello-world-container .'
     }
     exec {
-      commandLine 'cmd', '-c', 'docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS'
+      commandLine 'docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS'
     }
     exec {
-      commandLine 'cmd', '-c', 'docker push stumacsolutions/hello-world-container'
+      commandLine 'docker push stumacsolutions/hello-world-container'
     }
   }
 }
