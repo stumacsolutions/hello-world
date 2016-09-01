@@ -10,12 +10,14 @@ public class ApplicationTest
     private Application application;
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         application = new Application();
     }
 
     @Test
-    public void shouldSayHelloWhenHomeIsAccessed() {
+    public void shouldSayHelloWhenHomeIsAccessed()
+    {
         assertEquals("Hello, World!", application.home());
     }
 }
