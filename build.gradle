@@ -72,7 +72,7 @@ task docker(dependsOn: assemble) {
 task tag() {
     doLast {
         exec {
-            commandLine 'git', 'tag', '-a', System.getenv('SNAP_PIPELINE_COUNTER'), '-m', 'Tagging build.'
+            commandLine 'git', 'tag', '-a', System.getenv('SNAP_PIPELINE_COUNTER'), '-m', '"Tagging build."'
         }
         exec {
             commandLine 'git', 'push', 'origin', System.getenv('SNAP_PIPELINE_COUNTER')
