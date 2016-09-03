@@ -32,6 +32,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-hateoas')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.data:spring-data-rest-hal-browser')
     testCompile('info.cukes:cucumber-java:1.2.4')
     testCompile('info.cukes:cucumber-junit:1.2.4')
     testCompile('info.cukes:cucumber-spring:1.2.4')
