@@ -59,7 +59,7 @@ test {
     exclude 'acceptance/**'
 }
 
-task cucumber(type: Test) {
+task acceptanceTest(type: Test) {
     include 'acceptance/**'
 }
 
