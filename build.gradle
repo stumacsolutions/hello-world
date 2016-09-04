@@ -63,18 +63,27 @@ task acceptanceTest(type: Test) {
     include 'acceptance/**'
 }
 
-task docker(dependsOn: assemble) {
+task docker() {
+    // delete once CI build has been updated
+}
+
+task assembleContainer(dependsOn: assemble) {
   doLast {
     exec {
       commandLine 'docker', 'build', '-t', 'stumacsolutions/hello-world-container', '.'
     }
-    exec {
-      commandLine 'docker', 'login', '-e', System.getenv('DOCKER_EMAIL'), '-u', System.getenv('DOCKER_USER'), '-p', System.getenv('DOCKER_PASS')
-    }
-    exec {
-      commandLine 'docker', 'push', 'stumacsolutions/hello-world-container'
-    }
   }
+}
+
+task publishContainer(dependsOn: assembleContainer) {
+    doLast {
+        exec {
+            commandLine 'docker', 'login', '-e', System.getenv('DOCKER_EMAIL'), '-u', System.getenv('DOCKER_USER'), '-p', System.getenv('DOCKER_PASS')
+        }
+        exec {
+            commandLine 'docker', 'push', 'stumacsolutions/hello-world-container'
+        }
+    }
 }
 
 task tag() {
