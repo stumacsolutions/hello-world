@@ -1,5 +1,8 @@
 This is a simple hello world application built using Spring Boot.
 
+# Build Status
+[![Build Status](https://snap-ci.com/stumacsolutions/hello-world/branch/master/build_image)](https://snap-ci.com/stumacsolutions/hello-world/branch/master)
+
 # Gradle Commands
 
 ## ./gradlew acceptanceTest
