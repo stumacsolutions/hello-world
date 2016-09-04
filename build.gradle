@@ -57,6 +57,10 @@ pitest {
     timestampedReports = false
 }
 
+release {
+    failOnCommitNeeded = false
+}
+
 test {
     exclude 'acceptance/**'
 }
