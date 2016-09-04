@@ -57,6 +57,12 @@ pitest {
     timestampedReports = false
 }
 
+release {
+    useAutomaticVersion = true
+    releaseVersion = $version + System.getenv('SNAP_PIPELINE_COUNTER')
+    newVersion = $version
+}
+
 test {
     exclude 'acceptance/**'
 }
