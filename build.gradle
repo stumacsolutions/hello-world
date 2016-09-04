@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath('gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17')
         classpath('info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10')
+        classpath('net.researchgate:gradle-release:2.4.0')
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
     }
 }
@@ -25,6 +26,7 @@ apply plugin: 'spring-boot'
 
 apply plugin: 'com.gorylenko.gradle-git-properties'
 apply plugin: 'info.solidsoft.pitest'
+apply plugin: 'net.researchgate.release'
 
 group = 'hello'
 version = 'latest'
