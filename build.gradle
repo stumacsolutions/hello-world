@@ -63,10 +63,6 @@ task acceptanceTest(type: Test) {
     include 'acceptance/**'
 }
 
-task docker() {
-    // delete once CI build has been updated
-}
-
 task assembleContainer(dependsOn: assemble) {
   doLast {
     exec {
