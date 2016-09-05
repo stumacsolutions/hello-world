@@ -82,7 +82,7 @@ task publishContainer(dependsOn: assembleContainer) {
     }
 }
 
-task tag() {
+task publishTag() {
     doLast {
         exec {
             commandLine 'git', 'tag', '-a', System.getenv('SNAP_PIPELINE_COUNTER'), '-m', '"Tagging build."'
