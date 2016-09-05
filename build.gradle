@@ -88,7 +88,7 @@ task tag() {
             commandLine 'git', 'tag', '-a', System.getenv('SNAP_PIPELINE_COUNTER'), '-m', '"Tagging build."'
         }
         exec {
-            commandLine 'git', 'push', 'origin', System.getenv('SNAP_PIPELINE_COUNTER')
+            commandLine 'git', 'push', '--tags', 'origin', System.getenv('SNAP_PIPELINE_COUNTER')
         }
     }
 }
