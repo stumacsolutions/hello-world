@@ -1,3 +1,7 @@
+management:
+  info:
+    git:
+      mode: full
 security:
   user: 
     password: password
