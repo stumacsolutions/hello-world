@@ -55,6 +55,10 @@ pitest {
     timestampedReports = false
 }
 
+springBoot  {
+    buildInfo()
+}
+
 test {
     exclude 'acceptance/**'
 }
