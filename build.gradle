@@ -6,6 +6,7 @@ buildscript {
         }
     }
     dependencies {
+        classpath('org.kt3k.gradle.plugin:coveralls-gradle-plugin:1.0.2')
         classpath('gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17')
         classpath('info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10')
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
@@ -23,6 +24,7 @@ apply plugin: 'jacoco'
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 
+apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.gorylenko.gradle-git-properties'
 apply plugin: 'info.solidsoft.pitest'
 
