@@ -68,11 +68,27 @@ task acceptanceTest(type: Test) {
 }
 
 task assembleContainer(dependsOn: assemble) {
-  doLast {
-    exec {
-      commandLine 'docker', 'build', '-t', 'stumacsolutions/hello-world-container', '.'
+    doLast {
+        exec {
+            commandLine 'docker', 'build', '-t', 'stumacsolutions/hello-world-container', '.'
+        }
     }
-  }
+}
+
+task checkStyle() {
+    dependsOn {
+        tasks.findAll { 
+            task -> task.name.startsWith('checkstyle')
+        }
+    }
+}
+
+task findBugs() {
+    dependsOn {
+        tasks.findAll { 
+            task -> task.name.startsWith('findbugs')
+        }
+    }
 }
 
 task publishContainer(dependsOn: assembleContainer) {
