@@ -91,6 +91,14 @@ task findBugs() {
     }
 }
 
+task mutationTest() {
+    dependsOn {
+        tasks.findAll {
+            task -> task.name.equals('pitest')
+        }
+    }
+}
+
 task publishContainer(dependsOn: assembleContainer) {
     doLast {
         exec {
