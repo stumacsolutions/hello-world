@@ -47,6 +47,10 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+jacoco {
+    reportsDir = file("$buildDir/reports/testsCoverage")
+}
+
 jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
@@ -62,6 +66,7 @@ jar {
 
 pitest {
     mutationThreshold = 100
+    reportDir "$buildDir/reports/mutationTests"
     timestampedReports = false
 }
 
@@ -77,6 +82,7 @@ test.finalizedBy jacocoTestReport
 task acceptanceTest(type: Test) {
     include 'acceptance/**'
 }
+acceptanceTest.reports.html.destination = file("$buildDir/reports/acceptanceTests")
 
 task assembleContainer(dependsOn: assemble) {
     doLast {
