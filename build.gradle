@@ -47,6 +47,14 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**/ApplicationRunner.class')
+        })
+    }
+}
+
 jar {
     baseName = 'hello-world'
     version = 'latest'
@@ -64,6 +72,7 @@ springBoot  {
 test {
     exclude 'acceptance/**'
 }
+test.finalizedBy jacocoTestReport
 
 task acceptanceTest(type: Test) {
     include 'acceptance/**'
