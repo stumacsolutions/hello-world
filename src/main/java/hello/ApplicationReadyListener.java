@@ -41,7 +41,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
     private HttpHeaders httpHeaders;
     private RestTemplate restTemplate;
-    private int sleepDuration = 5000;
+    private int sleepDuration = 30000;
 
     @Autowired
     public ApplicationReadyListener(RestTemplate restTemplate)
