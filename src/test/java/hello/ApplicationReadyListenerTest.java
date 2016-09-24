@@ -157,6 +157,7 @@ public class ApplicationReadyListenerTest
     {
         setField(listener, "restHost", "http://localhost/api/");
         setField(listener, "serviceApiUri", "test");
+        setField(listener, "sleepDuration", 1);
     }
 
     private void verifyServiceConfigurationIsUpdated(InOrder inOrder, String url, ServiceConfiguration body)
