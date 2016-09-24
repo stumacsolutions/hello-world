@@ -95,9 +95,17 @@ public class ApplicationReadyListenerTest
     }
 
     @Test
-    public void shouldDoNothingIfApiPropertiesAreNotInjected()
+    public void shouldDoNothingIfRestHostPropertyIsNotInjected()
     {
-        unsetSystemPropertyValuesOnListener();
+        setField(listener, "restHost", null);
+        listener.onApplicationEvent(null);
+        verifyZeroInteractions(mockRestTemplate);
+    }
+
+    @Test
+    public void shouldDoNothingIfServiceApiUrlPropertyIsNotInjected()
+    {
+        setField(listener, "serviceApiUri", null);
         listener.onApplicationEvent(null);
         verifyZeroInteractions(mockRestTemplate);
     }
@@ -138,12 +146,6 @@ public class ApplicationReadyListenerTest
     {
         setField(listener, "restHost", "http://localhost/api/");
         setField(listener, "serviceApiUri", "test");
-    }
-
-    private void unsetSystemPropertyValuesOnListener()
-    {
-        setField(listener, "restHost", null);
-        setField(listener, "serviceApiUri", null);
     }
 
     private void verifyServiceConfigurationIsUpdated(InOrder inOrder, String url, ServiceConfiguration body)
