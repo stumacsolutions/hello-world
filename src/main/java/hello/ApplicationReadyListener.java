@@ -1,6 +1,9 @@
 package hello;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Singular;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -46,37 +49,40 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event)
     {
-        if (isEmpty(restHost) || isEmpty(serviceApiUri)) {
+        if (isEmpty(restHost) || isEmpty(serviceApiUri))
+        {
             return;
         }
         ServiceConfiguration currentServiceConfig = getServiceConfiguration(serviceApiUri);
 
         if (currentServiceConfig.getAutoRedeploy())
         {
-            ServiceLink serviceLink = new ServiceLink();
-            serviceLink.setName("web");
-            serviceLink.setServiceUri(serviceApiUri);
+            ServiceLink serviceLink = ServiceLink.builder().
+                    name("web").serviceUri(serviceApiUri).build();
 
             ServiceLink lbServiceLink = currentServiceConfig.getLinkedToServiceUrl("lb");
             ServiceLink otherServiceLink = currentServiceConfig.getLinkedToServiceUrl(serviceLink.getName());
 
             // update current service
-            ServiceConfiguration newServiceConfig = new ServiceConfiguration();
-            newServiceConfig.setAutoRedeploy(false);
-            newServiceConfig.setLinkedToServices(new ArrayList<>());
-            updateServiceConfiguration(serviceApiUri, newServiceConfig);
+            updateServiceConfiguration(serviceApiUri,
+                    ServiceConfiguration.builder().
+                            autoRedeploy(false).
+                            linkedToServices(new ArrayList<>()).
+                            build());
 
             // update load balancer
-            ServiceConfiguration lbServiceConfig = new ServiceConfiguration();
-            lbServiceConfig.addLinkedToService(serviceLink);
-            updateServiceConfiguration(lbServiceLink.getServiceUri(), lbServiceConfig);
+            updateServiceConfiguration(lbServiceLink.getServiceUri(),
+                    ServiceConfiguration.builder().
+                            linkedToService(serviceLink).
+                            build());
 
             // update other service
-            ServiceConfiguration otherServiceConfig = new ServiceConfiguration();
-            otherServiceConfig.addLinkedToService(lbServiceLink);
-            otherServiceConfig.addLinkedToService(serviceLink);
-            otherServiceConfig.setAutoRedeploy(true);
-            updateServiceConfiguration(otherServiceLink.getServiceUri(), otherServiceConfig);
+            updateServiceConfiguration(otherServiceLink.getServiceUri(),
+                    ServiceConfiguration.builder().
+                            autoRedeploy(true).
+                            linkedToService(lbServiceLink).
+                            linkedToService(serviceLink).
+                            build());
         }
     }
 
@@ -88,29 +94,22 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         return responseEntity.getBody();
     }
 
-    private ResponseEntity<ServiceConfiguration> updateServiceConfiguration(String uri, ServiceConfiguration config)
+    private void updateServiceConfiguration(String uri, ServiceConfiguration config)
     {
         HttpEntity<Object> entity = new HttpEntity<>(config, httpHeaders);
-        return restTemplate.exchange(restHost + uri, PATCH, entity, ServiceConfiguration.class);
+        restTemplate.exchange(restHost + uri, PATCH, entity, Void.class);
     }
 
-    private static final class ServiceConfiguration
+    @Data
+    @Builder
+    public static final class ServiceConfiguration
     {
         @JsonProperty("autoredeploy")
         private Boolean autoRedeploy;
 
+        @Singular
         @JsonProperty("linked_to_service")
         private List<ServiceLink> linkedToServices;
-
-        public Boolean getAutoRedeploy()
-        {
-            return autoRedeploy;
-        }
-
-        public void addLinkedToService(ServiceLink link)
-        {
-            getLinkedToServices().add(link);
-        }
 
         public ServiceLink getLinkedToServiceUrl(String name)
         {
@@ -123,53 +122,16 @@ public class ApplicationReadyListener implements ApplicationListener<Application
             }
             throw new IllegalStateException("Service link not found.");
         }
-
-        public List<ServiceLink> getLinkedToServices()
-        {
-            if (linkedToServices == null)
-            {
-                linkedToServices = new ArrayList<>();
-            }
-            return linkedToServices;
-        }
-
-        public void setAutoRedeploy(Boolean autoRedeploy)
-        {
-            this.autoRedeploy = autoRedeploy;
-        }
-
-        public void setLinkedToServices(List<ServiceLink> linkedToServices)
-        {
-            this.linkedToServices = linkedToServices;
-        }
     }
 
-    private static final class ServiceLink
+    @Data
+    @Builder
+    public static final class ServiceLink
     {
         @JsonProperty("name")
         private String name;
 
         @JsonProperty("to_service")
         private String serviceUri;
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public String getServiceUri()
-        {
-            return serviceUri;
-        }
-
-        public void setName(String name)
-        {
-            this.name = name;
-        }
-
-        public void setServiceUri(String serviceUri)
-        {
-            this.serviceUri = serviceUri;
-        }
     }
 }
