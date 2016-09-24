@@ -1,10 +1,7 @@
 package hello;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -104,6 +101,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     @Data
     @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static final class ServiceConfiguration
     {
         @JsonProperty("autoredeploy")
@@ -129,6 +127,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     @Data
     @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static final class ServiceLink
     {
         @JsonProperty("name")
