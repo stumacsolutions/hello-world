@@ -18,6 +18,6 @@ public class ApplicationTest
     @Test
     public void shouldSayHelloWhenHomeIsAccessed()
     {
-        assertEquals("Hello, World!", application.home());
+        assertEquals("Hello, World.", application.home());
     }
 }
