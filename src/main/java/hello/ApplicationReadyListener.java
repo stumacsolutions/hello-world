@@ -18,14 +18,15 @@ import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 public class ApplicationReadyListener implements ApplicationListener<ApplicationReadyEvent>
 {
-    @Value("${dockercloud.rest.host}")
+    @Value("${dockercloud.rest.host:}")
     private String restHost;
 
-    @Value("${dockercloud.service.api.uri}")
+    @Value("${dockercloud.service.api.uri:}")
     private String serviceApiUri;
 
     private HttpHeaders httpHeaders;
@@ -45,6 +46,9 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event)
     {
+        if (isEmpty(restHost) || isEmpty(serviceApiUri)) {
+            return;
+        }
         ServiceConfiguration currentServiceConfig = getServiceConfiguration(serviceApiUri);
 
         if (currentServiceConfig.getAutoRedeploy())
