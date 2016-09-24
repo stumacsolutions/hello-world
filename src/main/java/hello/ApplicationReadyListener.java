@@ -41,7 +41,6 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
     private HttpHeaders httpHeaders;
     private RestTemplate restTemplate;
-    private int sleepDuration = 30000;
 
     @Autowired
     public ApplicationReadyListener(RestTemplate restTemplate)
@@ -74,8 +73,6 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                             linkedToServices(new ArrayList<>()).
                             build());
 
-            sleep();
-
             updateServiceConfiguration(lbServiceLink.getToServiceUri(),
                     ServiceConfiguration.builder().
                             linkedToService(ServiceLink.builder().
@@ -84,8 +81,6 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                                     toServiceUri(lbServiceLink.getFromServiceUri()).
                                     build()).
                             build());
-
-            sleep();
 
             updateServiceConfiguration(otherServiceLink.getToServiceUri(),
                     ServiceConfiguration.builder().
@@ -117,17 +112,6 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     {
         HttpEntity<Object> entity = new HttpEntity<>(config, httpHeaders);
         restTemplate.exchange(restHost + uri, PATCH, entity, Void.class);
-    }
-
-    private void sleep()
-    {
-        try
-        {
-            Thread.sleep(sleepDuration);
-        } catch (InterruptedException e)
-        {
-            throw new IllegalStateException(e);
-        }
     }
 
     @Data
