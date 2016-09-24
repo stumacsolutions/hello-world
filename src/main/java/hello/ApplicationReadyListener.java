@@ -24,6 +24,9 @@ import static org.springframework.util.StringUtils.isEmpty;
 @Component
 public class ApplicationReadyListener implements ApplicationListener<ApplicationReadyEvent>
 {
+    private static final String SERVICE_NAME_LB = "lb";
+    private static final String SERVICE_NAME_WEB = "web";
+
     @Value("${dockercloud.rest.host:}")
     private String restHost;
 
@@ -51,30 +54,32 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         {
             return;
         }
-        ServiceConfiguration currentServiceConfig = getServiceConfiguration(serviceApiUri);
+        ServiceConfiguration serviceConfiguration = getServiceConfiguration(serviceApiUri);
 
-        if (currentServiceConfig.getAutoRedeploy())
+        if (serviceConfiguration.getAutoRedeploy())
         {
             ServiceLink serviceLink = ServiceLink.builder().
-                    name("web").serviceUri(serviceApiUri).build();
+                    name(SERVICE_NAME_WEB).
+                    serviceUri(serviceApiUri).
+                    build();
 
-            ServiceLink lbServiceLink = currentServiceConfig.getLinkedToServiceUrl("lb");
-            ServiceLink otherServiceLink = currentServiceConfig.getLinkedToServiceUrl(serviceLink.getName());
+            ServiceLink lbServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_LB);
+            ServiceLink otherServiceLink = serviceConfiguration.getLinkedToServiceUrl(serviceLink.getName());
 
-            // update current service
+            // disable auto redeploy and clear links on current service
             updateServiceConfiguration(serviceApiUri,
                     ServiceConfiguration.builder().
                             autoRedeploy(false).
                             linkedToServices(new ArrayList<>()).
                             build());
 
-            // update load balancer
+            // update load balancer link to point at current service
             updateServiceConfiguration(lbServiceLink.getServiceUri(),
                     ServiceConfiguration.builder().
                             linkedToService(serviceLink).
                             build());
 
-            // update other service
+            // enable auto redeploy on now inactive service and add links needed for next release
             updateServiceConfiguration(otherServiceLink.getServiceUri(),
                     ServiceConfiguration.builder().
                             autoRedeploy(true).
