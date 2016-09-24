@@ -41,6 +41,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
     private HttpHeaders httpHeaders;
     private RestTemplate restTemplate;
+    private Integer delay = 60000;
 
     @Autowired
     public ApplicationReadyListener(RestTemplate restTemplate)
@@ -64,6 +65,8 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
         if (serviceConfiguration.getAutoRedeploy())
         {
+            sleep();
+
             ServiceLink lbServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_LB);
             ServiceLink otherServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_WEB);
 
@@ -99,7 +102,6 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         }
     }
 
-
     private ServiceConfiguration getServiceConfiguration(String uri)
     {
         HttpEntity<Object> entity = new HttpEntity<>(null, httpHeaders);
@@ -108,10 +110,22 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         return responseEntity.getBody();
     }
 
+
     private void updateServiceConfiguration(String uri, ServiceConfiguration config)
     {
         HttpEntity<Object> entity = new HttpEntity<>(config, httpHeaders);
         restTemplate.exchange(restHost + uri, PATCH, entity, Void.class);
+    }
+
+    private void sleep()
+    {
+        try
+        {
+            Thread.sleep(delay);
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Data
