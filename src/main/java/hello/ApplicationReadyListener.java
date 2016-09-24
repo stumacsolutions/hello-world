@@ -65,15 +65,9 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
         if (serviceConfiguration.getAutoRedeploy())
         {
-            ServiceLink serviceLink = ServiceLink.builder().
-                    name(SERVICE_NAME_WEB).
-                    serviceUri(serviceApiUri).
-                    build();
-
             ServiceLink lbServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_LB);
-            ServiceLink otherServiceLink = serviceConfiguration.getLinkedToServiceUrl(serviceLink.getName());
+            ServiceLink otherServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_WEB);
 
-            // disable auto redeploy and clear links on current service
             updateServiceConfiguration(serviceApiUri,
                     ServiceConfiguration.builder().
                             autoRedeploy(false).
@@ -82,20 +76,30 @@ public class ApplicationReadyListener implements ApplicationListener<Application
 
             sleep();
 
-            // update load balancer link to point at current service
-            updateServiceConfiguration(lbServiceLink.getServiceUri(),
+            updateServiceConfiguration(lbServiceLink.getToServiceUri(),
                     ServiceConfiguration.builder().
-                            linkedToService(serviceLink).
+                            linkedToService(ServiceLink.builder().
+                                    fromServiceUri(lbServiceLink.getToServiceUri()).
+                                    name(SERVICE_NAME_WEB).
+                                    toServiceUri(lbServiceLink.getFromServiceUri()).
+                                    build()).
                             build());
 
             sleep();
 
-            // enable auto redeploy on now inactive service and add links needed for next release
-            updateServiceConfiguration(otherServiceLink.getServiceUri(),
+            updateServiceConfiguration(otherServiceLink.getToServiceUri(),
                     ServiceConfiguration.builder().
                             autoRedeploy(true).
-                            linkedToService(lbServiceLink).
-                            linkedToService(serviceLink).
+                            linkedToService(ServiceLink.builder().
+                                    fromServiceUri(otherServiceLink.getToServiceUri()).
+                                    name(lbServiceLink.getName()).
+                                    toServiceUri(lbServiceLink.getToServiceUri()).
+                                    build()).
+                            linkedToService(ServiceLink.builder().
+                                    fromServiceUri(otherServiceLink.getToServiceUri()).
+                                    name(otherServiceLink.getName()).
+                                    toServiceUri(otherServiceLink.getFromServiceUri()).
+                                    build()).
                             build());
         }
     }
@@ -158,10 +162,13 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     @AllArgsConstructor
     public static final class ServiceLink
     {
+        @JsonProperty("from_service")
+        private String fromServiceUri;
+
         @JsonProperty("name")
         private String name;
 
         @JsonProperty("to_service")
-        private String serviceUri;
+        private String toServiceUri;
     }
 }

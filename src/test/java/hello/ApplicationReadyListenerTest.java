@@ -49,12 +49,14 @@ public class ApplicationReadyListenerTest
         config = ServiceConfiguration.builder().
                 autoRedeploy(true).
                 linkedToService(ServiceLink.builder().
+                        fromServiceUri("test").
                         name("lb").
-                        serviceUri("lb").
+                        toServiceUri("lb").
                         build()).
                 linkedToService(ServiceLink.builder().
+                        fromServiceUri("test").
                         name("web").
-                        serviceUri("web").
+                        toServiceUri("other").
                         build()).
                 build();
 
@@ -85,22 +87,25 @@ public class ApplicationReadyListenerTest
                 inOrder, "http://localhost/api/lb",
                 ServiceConfiguration.builder().
                         linkedToService(ServiceLink.builder().
+                                fromServiceUri("lb").
                                 name("web").
-                                serviceUri("test").
+                                toServiceUri("test").
                                 build()).
                         build());
 
         verifyServiceConfigurationIsUpdated(
-                inOrder, "http://localhost/api/web",
+                inOrder, "http://localhost/api/other",
                 ServiceConfiguration.builder().
                         autoRedeploy(true).
                         linkedToService(ServiceLink.builder().
+                                fromServiceUri("other").
                                 name("lb").
-                                serviceUri("lb").
+                                toServiceUri("lb").
                                 build()).
                         linkedToService(ServiceLink.builder().
+                                fromServiceUri("other").
                                 name("web").
-                                serviceUri("test").
+                                toServiceUri("test").
                                 build()).
                         build());
     }
