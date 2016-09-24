@@ -160,7 +160,6 @@ public class ApplicationReadyListenerTest
 
     private void setSystemPropertyValuesOnListener()
     {
-        setField(listener, "delay", 1);
         setField(listener, "restHost", "http://localhost/api/");
         setField(listener, "serviceApiUri", "test");
     }
