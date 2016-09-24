@@ -77,20 +77,6 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                     ServiceConfiguration.builder().
                             linkedToService(ServiceLink.builder().
                                     fromServiceUri(lbServiceLink.getToServiceUri()).
-                                    name("temp").
-                                    toServiceUri(lbServiceLink.getFromServiceUri()).
-                                    build()).
-                            linkedToService(ServiceLink.builder().
-                                    fromServiceUri(lbServiceLink.getFromServiceUri()).
-                                    name(SERVICE_NAME_WEB).
-                                    toServiceUri(lbServiceLink.getToServiceUri()).
-                                    build()).
-                            build());
-
-            updateServiceConfiguration(lbServiceLink.getToServiceUri(),
-                    ServiceConfiguration.builder().
-                            linkedToService(ServiceLink.builder().
-                                    fromServiceUri(lbServiceLink.getToServiceUri()).
                                     name(SERVICE_NAME_WEB).
                                     toServiceUri(lbServiceLink.getFromServiceUri()).
                                     build()).
