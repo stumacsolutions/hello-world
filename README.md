@@ -3,22 +3,13 @@ main function is to act as a testing area for gradle, Spring Boot and
 the use of Snap CI to create a continuous deployment pipeline into an 
 AWS environment orchestrated by Docker Cloud.
 
-# Build Pipeline Status
 [![Build Status](https://snap-ci.com/stumacsolutions/hello-world/branch/master/build_image)](https://snap-ci.com/stumacsolutions/hello-world/branch/master)
+[![codecov](https://codecov.io/gh/stumacsolutions/hello-world/branch/master/graph/badge.svg)](https://codecov.io/gh/stumacsolutions/hello-world)
+
+# Build Pipeline
 
 The Snap CI pipeline for this project can be found here:
 https://snap-ci.com/stumacsolutions/hello-world/branch/master
-
-Each stage in the pipeline is a single gradle wrapper command. 
-The tasks run in each command are listed below in the order they are
-executed.
-* classes testClasses
-* checkStyle
-* findBugs
-* test jacocoTestReport
-* mutationTest
-* acceptanceTest
-* publishContainer
 
 # Live Environment
 The pipeline creates and pushes a Docker container to a Docker Hub
