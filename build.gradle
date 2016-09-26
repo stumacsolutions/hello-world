@@ -68,6 +68,9 @@ jacocoTestReport {
             fileTree(dir: it, exclude: '**/ApplicationRunner.class')
         })
     }
+    reports {
+        xml.enabled true
+    }
 }
 
 jar {
