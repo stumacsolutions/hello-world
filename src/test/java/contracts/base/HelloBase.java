@@ -6,8 +6,9 @@ import org.junit.Before;
 
 public class HelloBase
 {
-	@Before
-	public void setup() {
-		RestAssuredMockMvc.standaloneSetup(new Application());
-	}
+    @Before
+    public void setup()
+    {
+        RestAssuredMockMvc.standaloneSetup(new Application());
+    }
 }
