@@ -10,6 +10,7 @@ buildscript {
         classpath('gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17')
         classpath('info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10')
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
+        classpath('org.springframework.cloud:spring-cloud-contract-gradle-plugin:1.0.0.RELEASE')
     }
 }
 
@@ -19,10 +20,13 @@ repositories {
 
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
+apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 apply plugin: 'spring-boot'
+apply plugin: 'spring-cloud-contract'
 
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.gorylenko.gradle-git-properties'
@@ -47,6 +51,11 @@ dependencies {
     testCompile('info.cukes:cucumber-junit:1.2.4')
     testCompile('info.cukes:cucumber-spring:1.2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier:1.0.0.RELEASE')
+}
+
+contracts {
+    packageWithBaseClasses = 'contracts.base'
 }
 
 jacoco {
