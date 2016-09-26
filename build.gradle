@@ -26,7 +26,7 @@ apply plugin: 'jacoco'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'spring-boot'
-apply plugin: 'spring-cloud-contract'
+// apply plugin: 'spring-cloud-contract'
 
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.gorylenko.gradle-git-properties'
@@ -54,9 +54,9 @@ dependencies {
     testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier:1.0.0.RELEASE')
 }
 
-contracts {
-    packageWithBaseClasses = 'contracts.base'
-}
+//contracts {
+//    packageWithBaseClasses = 'contracts.base'
+//}
 
 jacoco {
     reportsDir = file("$buildDir/reports/testsCoverage")
