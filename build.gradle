@@ -55,7 +55,7 @@ dependencies {
 }
 
 //contracts {
-//    packageWithBaseClasses = 'contracts.base'
+//    packageWithBaseClasses = 'com.example.contracts.base'
 //}
 
 jacoco {
@@ -80,6 +80,7 @@ jar {
 
 pitest {
     reportDir "$buildDir/reports/mutationTests"
+    targetClasses = ['com.example.*']
     timestampedReports = false
 }
 
@@ -88,12 +89,12 @@ springBoot  {
 }
 
 test {
-    exclude 'acceptance/**'
+    exclude '**/acceptance/**'
 }
 test.finalizedBy jacocoTestReport
 
 task acceptanceTest(type: Test) {
-    include 'acceptance/**'
+    include '**/acceptance/**'
 }
 acceptanceTest.reports.html.destination = file("$buildDir/reports/acceptanceTests")
 

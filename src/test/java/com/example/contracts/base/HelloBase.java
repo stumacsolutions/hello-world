@@ -1,7 +1,7 @@
-package contracts.base;
+package com.example.contracts.base;
 
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
-import hello.Application;
+import com.example.Application;
 import org.junit.Before;
 
 public class HelloBase

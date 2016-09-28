@@ -1,4 +1,4 @@
-package hello;
+package com.example;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package hello;
+package com.example;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hello.ApplicationReadyListener.ServiceConfiguration;
-import static hello.ApplicationReadyListener.ServiceLink;
+import static com.example.ApplicationReadyListener.ServiceConfiguration;
+import static com.example.ApplicationReadyListener.ServiceLink;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.inOrder;
