@@ -12,15 +12,12 @@ The Snap CI pipeline for this project can be found here:
 https://snap-ci.com/stumacsolutions/hello-world/branch/master
 
 # Live Environment
+The application is deployed to an AWS node managed by Docker Cloud:
+http://lb.hello-world.fb305fe4.svc.dockerapp.io (user/password)
+
 The pipeline creates and pushes a Docker container to a Docker Hub
 registry which can be found here:
-https://hub.docker.com/r/stumacsolutions/hello-world-container/
-
-Docker Cloud monitors this registry and when it detects a new version 
-of the container it deploys it automatically. There is a short period
-of downtime at present when this happens. When the deployment is done
-the application can be seen in all its glory here (user/password):
-http://lb.hello-world.fb305fe4.svc.dockerapp.io/
+https://hub.docker.com/r/stumacsolutions/hello-world-container
 
 The .gradle and build folders are collected as artifacts on every stage
 of the pipeline. These are automatically made available to all subsequent
