@@ -5,11 +5,3 @@ management:
 security:
   user: 
     password: password
-
-dockercloud:
-  rest:
-    host: https://cloud.docker.com
-  service:
-    api:
-      uri: /api/app/v1/stumacsolutions/service/22a6df8b-6354-4138-a368-def859caaadd/ # blue
-#      uri: /api/app/v1/stumacsolutions/service/6e41c4e5-f781-46cb-95cb-1c1d034fb2d3/ # green
