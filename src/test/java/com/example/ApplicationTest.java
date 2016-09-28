@@ -2,8 +2,9 @@ package com.example;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ApplicationTest
 {
@@ -16,8 +17,10 @@ public class ApplicationTest
     }
 
     @Test
-    public void shouldSayHelloWhenHomeIsAccessed()
+    public void shouldBeAnnotatedAsSpringBootApplication()
     {
-        assertEquals("Hello, World.", application.home());
+        Class<? extends Application> applicationClass = application.getClass();
+        SpringBootApplication annotation = applicationClass.getAnnotation(SpringBootApplication.class);
+        assertNotNull(annotation);
     }
 }
