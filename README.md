@@ -9,6 +9,7 @@ To deploy into your own Docker Cloud environment click the button below:
 
 [![Build Status](https://snap-ci.com/stumacsolutions/hello-world/branch/master/build_image)](https://snap-ci.com/stumacsolutions/hello-world/branch/master)
 [![codecov](https://codecov.io/gh/stumacsolutions/hello-world/branch/master/graph/badge.svg)](https://codecov.io/gh/stumacsolutions/hello-world)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5ab4d3e898194a6eaef4e80dbc556934)](https://www.codacy.com/app/stumacsolutions/hello-world?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stumacsolutions/hello-world&amp;utm_campaign=Badge_Grade)
 
 # Build Pipeline
 
