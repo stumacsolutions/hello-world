@@ -25,19 +25,19 @@ public class HelloWorldSteps
     private ResponseEntity<String> response;
 
     @Given("^the application is running$")
-    public void the_application_is_running() throws Throwable
+    public void givenTheApplicationIsRunning() throws Throwable
     {
         // Write code here that turns the phrase above into concrete actions
     }
 
     @When("^i say hello to the application$")
-    public void i_say_hello_to_the_application() throws Throwable
+    public void whenISayHelloToTheApplication() throws Throwable
     {
         response = restTemplate.getForEntity("/", String.class);
     }
 
     @Then("^the application should say hello to me$")
-    public void the_application_should_say_hello_to_me() throws Throwable
+    public void thenTheApplicationShouldSayHelloToMe() throws Throwable
     {
         assertNotNull(response);
         assertEquals(OK, response.getStatusCode());
