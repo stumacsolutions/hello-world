@@ -3,6 +3,9 @@ main function is to act as a testing area for gradle, Spring Boot and
 the use of Snap CI to create a continuous deployment pipeline into an 
 AWS environment orchestrated by Docker Cloud.
 
+To deploy into your own Docker Cloud environment click the button below:
+[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/)
+
 [![Build Status](https://snap-ci.com/stumacsolutions/hello-world/branch/master/build_image)](https://snap-ci.com/stumacsolutions/hello-world/branch/master)
 [![codecov](https://codecov.io/gh/stumacsolutions/hello-world/branch/master/graph/badge.svg)](https://codecov.io/gh/stumacsolutions/hello-world)
 

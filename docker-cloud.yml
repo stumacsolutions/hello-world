@@ -1,0 +1,18 @@
+lb:
+  image: 'dockercloud/haproxy:1.5.3'
+  links:
+    - 'web-blue:web'
+  ports:
+    - '80:80'
+  roles:
+    - global
+web-blue:
+  deployment_strategy: high_availability
+  image: 'stumacsolutions/hello-world-container:latest'
+web-green:
+  autoredeploy: true
+  deployment_strategy: high_availability
+  image: 'stumacsolutions/hello-world-container:latest'
+  links:
+    - lb
+    - 'web-blue:web'
