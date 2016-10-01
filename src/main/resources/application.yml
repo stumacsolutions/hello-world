@@ -5,3 +5,6 @@ management:
 security:
   user: 
     password: password
+spring:
+  jackson:
+    serialization-inclusion: non_null
