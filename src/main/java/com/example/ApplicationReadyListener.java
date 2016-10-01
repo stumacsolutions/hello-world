@@ -71,6 +71,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                     ServiceConfiguration.builder().
                             autoRedeploy(false).
                             linkedToServices(new ArrayList<>()).
+                            targetNumberOfContainers(2).
                             build());
 
             updateServiceConfiguration(lbServiceLink.getToServiceUri(),
@@ -95,6 +96,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                                     name(otherServiceLink.getName()).
                                     toServiceUri(otherServiceLink.getFromServiceUri()).
                                     build()).
+                            targetNumberOfContainers(1).
                             build());
         }
     }
@@ -126,6 +128,9 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         @Singular
         @JsonProperty("linked_to_service")
         private List<ServiceLink> linkedToServices;
+
+        @JsonProperty("target_num_containers")
+        private Integer targetNumberOfContainers;
 
         public ServiceLink getLinkedToServiceUrl(String name)
         {

@@ -81,6 +81,7 @@ public class ApplicationReadyListenerTest
                 ServiceConfiguration.builder().
                         autoRedeploy(false).
                         linkedToServices(new ArrayList<>()).
+                        targetNumberOfContainers(2).
                         build());
 
         verifyServiceConfigurationIsUpdated(
@@ -107,6 +108,7 @@ public class ApplicationReadyListenerTest
                                 name("web").
                                 toServiceUri("test").
                                 build()).
+                        targetNumberOfContainers(1).
                         build());
     }
 
