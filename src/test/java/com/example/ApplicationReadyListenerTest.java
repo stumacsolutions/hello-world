@@ -38,6 +38,7 @@ public class ApplicationReadyListenerTest
 {
     private ServiceConfiguration config;
     private ApplicationReadyListener listener;
+    private ServiceConfiguration otherConfig;
 
     @Mock
     private RestTemplate mockRestTemplate;
@@ -61,12 +62,21 @@ public class ApplicationReadyListenerTest
                         build()).
                 build();
 
+        otherConfig = ServiceConfiguration.builder().
+                autoRedeploy(false).
+                targetNumberOfContainers(3).
+                build();
+
         listener = new ApplicationReadyListener(mockRestTemplate);
         setSystemPropertyValuesOnListener();
 
         when(mockRestTemplate.exchange(
                 eq("http://localhost/api/test"), same(GET), any(HttpEntity.class), same(ServiceConfiguration.class))).
                 thenReturn(ResponseEntity.ok(config));
+
+        when(mockRestTemplate.exchange(
+                eq("http://localhost/api/other"), same(GET), any(HttpEntity.class), same(ServiceConfiguration.class))).
+                thenReturn(ResponseEntity.ok(otherConfig));
     }
 
 
@@ -82,7 +92,7 @@ public class ApplicationReadyListenerTest
                 ServiceConfiguration.builder().
                         autoRedeploy(false).
                         linkedToServices(new ArrayList<>()).
-                        targetNumberOfContainers(2).
+                        targetNumberOfContainers(3).
                         build());
 
         verifyServiceIsScaled(inOrder, "http://localhost/api/test");

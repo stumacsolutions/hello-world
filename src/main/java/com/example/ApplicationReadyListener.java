@@ -72,7 +72,9 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                     ServiceConfiguration.builder().
                             autoRedeploy(false).
                             linkedToServices(new ArrayList<>()).
-                            targetNumberOfContainers(2).
+                            targetNumberOfContainers(
+                                    getServiceConfiguration(otherServiceLink.getToServiceUri()).
+                                            getTargetNumberOfContainers()).
                             build());
 
             scaleService(serviceApiUri);
