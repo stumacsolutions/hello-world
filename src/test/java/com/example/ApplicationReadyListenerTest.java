@@ -185,7 +185,7 @@ public class ApplicationReadyListenerTest
         HttpHeaders httpHeaders = constructExpectedHttpHeaders();
         HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
         inOrder.verify(mockRestTemplate, times(1)).exchange(
-                eq(url + "/scale"), same(POST), refEq(entity), same(Void.class));
+                eq(url + "/scale/"), same(POST), refEq(entity), same(Void.class));
     }
 
     private HttpHeaders constructExpectedHttpHeaders()

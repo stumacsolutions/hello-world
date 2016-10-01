@@ -118,7 +118,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     private void scaleService(String uri)
     {
         HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
-        restTemplate.exchange(restHost + uri + "/scale", POST, entity, Void.class);
+        restTemplate.exchange(restHost + uri + "/scale/", POST, entity, Void.class);
     }
 
     private void updateServiceConfiguration(String uri, ServiceConfiguration config)
