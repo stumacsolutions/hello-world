@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationInfoContributor implements InfoContributor
 {
-    @Value("dockercloud.service.hostname:unknown")
+    @Value("${dockercloud.service.hostname:unknown}")
     private String serviceHostname;
 
     @Override
