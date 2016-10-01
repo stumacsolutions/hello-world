@@ -30,6 +30,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
@@ -84,6 +85,8 @@ public class ApplicationReadyListenerTest
                         targetNumberOfContainers(2).
                         build());
 
+        verifyServiceIsScaled(inOrder, "http://localhost/api/test");
+
         verifyServiceConfigurationIsUpdated(
                 inOrder, "http://localhost/api/lb",
                 ServiceConfiguration.builder().
@@ -111,6 +114,8 @@ public class ApplicationReadyListenerTest
                                 build()).
                         targetNumberOfContainers(1).
                         build());
+
+        verifyServiceIsScaled(inOrder, "http://localhost/api/other");
     }
 
     @Test
@@ -169,13 +174,26 @@ public class ApplicationReadyListenerTest
 
     private void verifyServiceConfigurationIsUpdated(InOrder inOrder, String url, ServiceConfiguration body)
     {
+        HttpHeaders httpHeaders = constructExpectedHttpHeaders();
+        HttpEntity<ServiceConfiguration> entity = new HttpEntity<>(body, httpHeaders);
+        inOrder.verify(mockRestTemplate, times(1)).exchange(
+                eq(url), same(PATCH), refEq(entity), same(Void.class));
+    }
+
+    private void verifyServiceIsScaled(InOrder inOrder, String url)
+    {
+        HttpHeaders httpHeaders = constructExpectedHttpHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
+        inOrder.verify(mockRestTemplate, times(1)).exchange(
+                eq(url + "/scale"), same(POST), refEq(entity), same(Void.class));
+    }
+
+    private HttpHeaders constructExpectedHttpHeaders()
+    {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(AUTHORIZATION, "Basic c3R1bWFjc29sdXRpb25zOjhjZjVlZjcwLWY2MDctNDNkMi04NDkwLTFjNWUyZDBlY2I4ZQ==");
         httpHeaders.set(ACCEPT, APPLICATION_JSON_VALUE);
         httpHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
-
-        HttpEntity<ServiceConfiguration> entity = new HttpEntity<>(body, httpHeaders);
-        inOrder.verify(mockRestTemplate, times(1)).exchange(
-                eq(url), same(PATCH), refEq(entity), same(Void.class));
+        return httpHeaders;
     }
 }

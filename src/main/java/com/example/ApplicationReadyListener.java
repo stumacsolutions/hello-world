@@ -24,6 +24,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -74,6 +75,8 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                             targetNumberOfContainers(2).
                             build());
 
+            scaleService(serviceApiUri);
+
             updateServiceConfiguration(lbServiceLink.getToServiceUri(),
                     ServiceConfiguration.builder().
                             linkedToService(ServiceLink.builder().
@@ -99,6 +102,8 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                                     build()).
                             targetNumberOfContainers(1).
                             build());
+
+            scaleService(otherServiceLink.getToServiceUri());
         }
     }
 
@@ -110,6 +115,11 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         return responseEntity.getBody();
     }
 
+    private void scaleService(String uri)
+    {
+        HttpEntity<Void> entity = new HttpEntity<>(httpHeaders);
+        restTemplate.exchange(restHost + uri + "/scale", POST, entity, Void.class);
+    }
 
     private void updateServiceConfiguration(String uri, ServiceConfiguration config)
     {
