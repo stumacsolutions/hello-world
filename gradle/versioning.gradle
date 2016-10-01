@@ -1,0 +1,21 @@
+version = new ProjectVersion(1, 0, System.env.SNAP_PIPELINE_COUNTER)
+
+class ProjectVersion {
+
+    Integer major
+    Integer minor
+    String build
+
+    ProjectVersion(Integer major, Integer minor, String build)
+    {
+        this.major = major
+        this.minor = minor
+        this.build = build
+    }
+
+    @Override
+    String toString()
+    {
+        return build ? "$major.$minor.$build" : "$major.$minor"
+    }
+}

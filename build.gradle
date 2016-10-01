@@ -32,8 +32,9 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.gorylenko.gradle-git-properties'
 apply plugin: 'info.solidsoft.pitest'
 
-group = 'hello'
-version = 'latest'
+apply from: "$rootDir/gradle/versioning.gradle"
+
+group = 'com.example'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
