@@ -61,26 +61,26 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         {
             return;
         }
-        ServiceConfiguration serviceConfiguration = getServiceConfiguration(serviceApiUri);
+        Service serviceConfiguration = getService(serviceApiUri);
 
         if (serviceConfiguration.getAutoRedeploy())
         {
             ServiceLink lbServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_LB);
             ServiceLink otherServiceLink = serviceConfiguration.getLinkedToServiceUrl(SERVICE_NAME_WEB);
 
-            updateServiceConfiguration(serviceApiUri,
-                    ServiceConfiguration.builder().
+            updateService(serviceApiUri,
+                    Service.builder().
                             autoRedeploy(false).
                             linkedToServices(new ArrayList<>()).
                             targetNumberOfContainers(
-                                    getServiceConfiguration(otherServiceLink.getToServiceUri()).
+                                    getService(otherServiceLink.getToServiceUri()).
                                             getTargetNumberOfContainers()).
                             build());
 
             scaleService(serviceApiUri);
 
-            updateServiceConfiguration(lbServiceLink.getToServiceUri(),
-                    ServiceConfiguration.builder().
+            updateService(lbServiceLink.getToServiceUri(),
+                    Service.builder().
                             linkedToService(ServiceLink.builder().
                                     fromServiceUri(lbServiceLink.getToServiceUri()).
                                     name(SERVICE_NAME_WEB).
@@ -89,8 +89,8 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                             targetNumberOfContainers(1).
                             build());
 
-            updateServiceConfiguration(otherServiceLink.getToServiceUri(),
-                    ServiceConfiguration.builder().
+            updateService(otherServiceLink.getToServiceUri(),
+                    Service.builder().
                             autoRedeploy(true).
                             linkedToService(ServiceLink.builder().
                                     fromServiceUri(otherServiceLink.getToServiceUri()).
@@ -109,11 +109,11 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         }
     }
 
-    private ServiceConfiguration getServiceConfiguration(String uri)
+    private Service getService(String uri)
     {
         HttpEntity<Object> entity = new HttpEntity<>(null, httpHeaders);
-        ResponseEntity<ServiceConfiguration> responseEntity =
-                restTemplate.exchange(restHost + uri, GET, entity, ServiceConfiguration.class);
+        ResponseEntity<Service> responseEntity =
+                restTemplate.exchange(restHost + uri, GET, entity, Service.class);
         return responseEntity.getBody();
     }
 
@@ -123,7 +123,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
         restTemplate.exchange(restHost + uri + "/scale/", POST, entity, Void.class);
     }
 
-    private void updateServiceConfiguration(String uri, ServiceConfiguration config)
+    private void updateService(String uri, Service config)
     {
         HttpEntity<Object> entity = new HttpEntity<>(config, httpHeaders);
         restTemplate.exchange(restHost + uri, PATCH, entity, Void.class);
@@ -133,7 +133,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static final class ServiceConfiguration
+    public static final class Service
     {
         @JsonProperty("autoredeploy")
         private Boolean autoRedeploy;

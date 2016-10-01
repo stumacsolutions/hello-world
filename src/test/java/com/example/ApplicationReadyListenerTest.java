@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.ApplicationReadyListener.ServiceConfiguration;
+import static com.example.ApplicationReadyListener.Service;
 import static com.example.ApplicationReadyListener.ServiceLink;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
@@ -36,9 +36,9 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 public class ApplicationReadyListenerTest
 {
-    private ServiceConfiguration config;
+    private Service config;
     private ApplicationReadyListener listener;
-    private ServiceConfiguration otherConfig;
+    private Service otherConfig;
 
     @Mock
     private RestTemplate mockRestTemplate;
@@ -48,7 +48,7 @@ public class ApplicationReadyListenerTest
     {
         initMocks(this);
 
-        config = ServiceConfiguration.builder().
+        config = Service.builder().
                 autoRedeploy(true).
                 linkedToService(ServiceLink.builder().
                         fromServiceUri("test").
@@ -62,7 +62,7 @@ public class ApplicationReadyListenerTest
                         build()).
                 build();
 
-        otherConfig = ServiceConfiguration.builder().
+        otherConfig = Service.builder().
                 autoRedeploy(false).
                 targetNumberOfContainers(3).
                 build();
@@ -71,11 +71,11 @@ public class ApplicationReadyListenerTest
         setSystemPropertyValuesOnListener();
 
         when(mockRestTemplate.exchange(
-                eq("http://localhost/api/test"), same(GET), any(HttpEntity.class), same(ServiceConfiguration.class))).
+                eq("http://localhost/api/test"), same(GET), any(HttpEntity.class), same(Service.class))).
                 thenReturn(ResponseEntity.ok(config));
 
         when(mockRestTemplate.exchange(
-                eq("http://localhost/api/other"), same(GET), any(HttpEntity.class), same(ServiceConfiguration.class))).
+                eq("http://localhost/api/other"), same(GET), any(HttpEntity.class), same(Service.class))).
                 thenReturn(ResponseEntity.ok(otherConfig));
     }
 
@@ -89,7 +89,7 @@ public class ApplicationReadyListenerTest
 
         verifyServiceConfigurationIsUpdated(
                 inOrder, "http://localhost/api/test",
-                ServiceConfiguration.builder().
+                Service.builder().
                         autoRedeploy(false).
                         linkedToServices(new ArrayList<>()).
                         targetNumberOfContainers(3).
@@ -99,7 +99,7 @@ public class ApplicationReadyListenerTest
 
         verifyServiceConfigurationIsUpdated(
                 inOrder, "http://localhost/api/lb",
-                ServiceConfiguration.builder().
+                Service.builder().
                         linkedToService(ServiceLink.builder().
                                 fromServiceUri("lb").
                                 name("web").
@@ -110,7 +110,7 @@ public class ApplicationReadyListenerTest
 
         verifyServiceConfigurationIsUpdated(
                 inOrder, "http://localhost/api/other",
-                ServiceConfiguration.builder().
+                Service.builder().
                         autoRedeploy(true).
                         linkedToService(ServiceLink.builder().
                                 fromServiceUri("other").
@@ -152,7 +152,7 @@ public class ApplicationReadyListenerTest
         listener.onApplicationEvent(null);
 
         verify(mockRestTemplate).exchange(
-                eq("http://localhost/api/test"), same(GET), any(HttpEntity.class), same(ServiceConfiguration.class));
+                eq("http://localhost/api/test"), same(GET), any(HttpEntity.class), same(Service.class));
         verifyNoMoreInteractions(mockRestTemplate);
     }
 
@@ -182,10 +182,10 @@ public class ApplicationReadyListenerTest
         setField(listener, "serviceApiUri", "test");
     }
 
-    private void verifyServiceConfigurationIsUpdated(InOrder inOrder, String url, ServiceConfiguration body)
+    private void verifyServiceConfigurationIsUpdated(InOrder inOrder, String url, Service body)
     {
         HttpHeaders httpHeaders = constructExpectedHttpHeaders();
-        HttpEntity<ServiceConfiguration> entity = new HttpEntity<>(body, httpHeaders);
+        HttpEntity<Service> entity = new HttpEntity<>(body, httpHeaders);
         inOrder.verify(mockRestTemplate, times(1)).exchange(
                 eq(url), same(PATCH), refEq(entity), same(Void.class));
     }
