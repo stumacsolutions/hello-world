@@ -57,6 +57,10 @@ provided by the checkstyle plugin.
 This command is a simple convenience command which wraps up the tasks 
 provided by the findbugs plugin.
 
+## ./gradlew jdepend
+This command is a simple convenience command which wraps up the tasks 
+provided by the jdepend plugin.
+
 ## ./gradlew mutationTest
 This command will perform mutation testing on the project. This ensures
 that the tests are of a high standard and are performing meaningful
