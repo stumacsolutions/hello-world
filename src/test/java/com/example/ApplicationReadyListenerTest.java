@@ -92,6 +92,7 @@ public class ApplicationReadyListenerTest
                                 name("web").
                                 toServiceUri("test").
                                 build()).
+                        targetNumberOfContainers(1).
                         build());
 
         verifyServiceConfigurationIsUpdated(

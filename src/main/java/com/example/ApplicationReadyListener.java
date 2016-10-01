@@ -81,6 +81,7 @@ public class ApplicationReadyListener implements ApplicationListener<Application
                                     name(SERVICE_NAME_WEB).
                                     toServiceUri(lbServiceLink.getFromServiceUri()).
                                     build()).
+                            targetNumberOfContainers(1).
                             build());
 
             updateServiceConfiguration(otherServiceLink.getToServiceUri(),
