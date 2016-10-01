@@ -79,7 +79,10 @@ jar {
 }
 
 pitest {
-    reportDir "$buildDir/reports/mutationTests"
+    coverageThreshold = 90
+    excludedMethods = ['builder', 'equals', 'hashCode', 'toString']
+    mutationThreshold = 90
+    reportDir = "$buildDir/reports/mutationTests"
     targetClasses = ['com.example.*']
     timestampedReports = false
 }
