@@ -20,6 +20,7 @@ apply from: "$rootDir/gradle/building.gradle"
 apply from: "$rootDir/gradle/checking.gradle"
 apply from: "$rootDir/gradle/developing.gradle"
 apply from: "$rootDir/gradle/packaging.gradle"
+apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/testing.gradle"
 apply from: "$rootDir/gradle/versioning.gradle"
 
