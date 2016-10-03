@@ -1,0 +1,44 @@
+apply plugin: 'info.solidsoft.pitest'
+apply plugin: 'jacoco'
+
+jacoco {
+    reportsDir = file("$buildDir/reports/testsCoverage")
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**/ApplicationRunner.class')
+        })
+    }
+    reports {
+        xml.enabled true
+    }
+}
+
+pitest {
+    coverageThreshold = 90
+    excludedMethods = ['builder', 'equals', 'hashCode', 'toString']
+    mutationThreshold = 85
+    reportDir = "$buildDir/reports/mutationTests"
+    targetClasses = ['com.example.*']
+    timestampedReports = false
+}
+
+test {
+    exclude '**/acceptance/**'
+}
+test.finalizedBy jacocoTestReport
+
+task acceptanceTest(type: Test) {
+    include '**/acceptance/**'
+}
+acceptanceTest.reports.html.destination = file("$buildDir/reports/acceptanceTests")
+
+task mutationTest() {
+    dependsOn {
+        tasks.findAll {
+            task -> task.name.equals('pitest')
+        }
+    }
+}

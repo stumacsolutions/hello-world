@@ -2,15 +2,13 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url 'https://plugins.gradle.org/m2/'
         }
     }
     dependencies {
-        classpath('org.kt3k.gradle.plugin:coveralls-gradle-plugin:1.0.2')
         classpath('gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17')
         classpath('info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10')
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
-        classpath('org.springframework.cloud:spring-cloud-contract-gradle-plugin:1.0.0.RELEASE')
     }
 }
 
@@ -18,27 +16,12 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'jacoco'
-apply plugin: 'java'
-apply plugin: 'jdepend'
-apply plugin: 'maven-publish'
-apply plugin: 'spring-boot'
-// apply plugin: 'spring-cloud-contract'
-
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'com.gorylenko.gradle-git-properties'
-apply plugin: 'info.solidsoft.pitest'
-
+apply from: "$rootDir/gradle/building.gradle"
+apply from: "$rootDir/gradle/checking.gradle"
+apply from: "$rootDir/gradle/developing.gradle"
+apply from: "$rootDir/gradle/packaging.gradle"
+apply from: "$rootDir/gradle/testing.gradle"
 apply from: "$rootDir/gradle/versioning.gradle"
-
-group = 'com.example'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 dependencies {
     compile('org.apache.httpcomponents:httpclient')
@@ -53,118 +36,4 @@ dependencies {
     testCompile('info.cukes:cucumber-junit:1.2.4')
     testCompile('info.cukes:cucumber-spring:1.2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier:1.0.0.RELEASE')
-}
-
-//contracts {
-//    packageWithBaseClasses = 'com.example.contracts.base'
-//}
-
-jacoco {
-    reportsDir = file("$buildDir/reports/testsCoverage")
-}
-
-jacocoTestReport {
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**/ApplicationRunner.class')
-        })
-    }
-    reports {
-        xml.enabled true
-    }
-}
-
-jar {
-    baseName = 'hello-world'
-    version = 'latest'
-}
-
-pitest {
-    coverageThreshold = 90
-    excludedMethods = ['builder', 'equals', 'hashCode', 'toString']
-    mutationThreshold = 85
-    reportDir = "$buildDir/reports/mutationTests"
-    targetClasses = ['com.example.*']
-    timestampedReports = false
-}
-
-springBoot  {
-    buildInfo()
-}
-
-test {
-    exclude '**/acceptance/**'
-}
-test.finalizedBy jacocoTestReport
-
-task acceptanceTest(type: Test) {
-    include '**/acceptance/**'
-}
-acceptanceTest.reports.html.destination = file("$buildDir/reports/acceptanceTests")
-
-task assembleContainer(dependsOn: assemble) {
-    doLast {
-        exec {
-            commandLine 'docker', 'build', '-t', 'stumacsolutions/hello-world-container', '.'
-        }
-    }
-}
-
-task checkStyle() {
-    dependsOn {
-        tasks.findAll { 
-            task -> task.name.startsWith('checkstyle')
-        }
-    }
-}
-
-task findBugs() {
-    dependsOn {
-        tasks.findAll { 
-            task -> task.name.startsWith('findbugs')
-        }
-    }
-}
-
-task jdepend() {
-    dependsOn {
-        tasks.findAll {
-            task -> task.name.startsWith('jdepend')
-        }
-    }
-}
-
-task mutationTest() {
-    dependsOn {
-        tasks.findAll {
-            task -> task.name.equals('pitest')
-        }
-    }
-}
-
-task publishContainer(dependsOn: assembleContainer) {
-    doLast {
-        exec {
-            commandLine 'docker', 'login', '-e', System.getenv('DOCKER_EMAIL'), '-u', System.getenv('DOCKER_USER'), '-p', System.getenv('DOCKER_PASS')
-        }
-        exec {
-            commandLine 'docker', 'push', 'stumacsolutions/hello-world-container'
-        }
-    }
-}
-
-task publishTag() {
-    doLast {
-        exec {
-            commandLine 'git', 'tag', '-a', System.getenv('SNAP_PIPELINE_COUNTER'), '-m', '"Publishing git tag."'
-        }
-        exec {
-            commandLine 'git', 'push', 'origin', System.getenv('SNAP_PIPELINE_COUNTER')
-        }
-    }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
 }

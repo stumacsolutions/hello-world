@@ -1,0 +1,21 @@
+group = 'com.example'
+
+apply plugin: 'com.gorylenko.gradle-git-properties'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'hello-world'
+    version = 'latest'
+}
+
+springBoot  {
+    buildInfo()
+}
+
+task assembleContainer(dependsOn: assemble) {
+    doLast {
+        exec {
+            commandLine 'docker', 'build', '-t', 'stumacsolutions/hello-world-container', '.'
+        }
+    }
+}

@@ -1,0 +1,23 @@
+apply plugin: 'maven-publish'
+
+task publishContainer(dependsOn: assembleContainer) {
+    doLast {
+        exec {
+            commandLine 'docker', 'login', '-e', System.getenv('DOCKER_EMAIL'), '-u', System.getenv('DOCKER_USER'), '-p', System.getenv('DOCKER_PASS')
+        }
+        exec {
+            commandLine 'docker', 'push', 'stumacsolutions/hello-world-container'
+        }
+    }
+}
+
+task publishTag() {
+    doLast {
+        exec {
+            commandLine 'git', 'tag', '-a', System.getenv('SNAP_PIPELINE_COUNTER'), '-m', '"Publishing git tag."'
+        }
+        exec {
+            commandLine 'git', 'push', 'origin', System.getenv('SNAP_PIPELINE_COUNTER')
+        }
+    }
+}

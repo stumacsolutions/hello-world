@@ -1,0 +1,27 @@
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'jdepend'
+
+task checkStyle() {
+    dependsOn {
+        tasks.findAll {
+            task -> task.name.startsWith('checkstyle')
+        }
+    }
+}
+
+task findBugs() {
+    dependsOn {
+        tasks.findAll {
+            task -> task.name.startsWith('findbugs')
+        }
+    }
+}
+
+task jdepend() {
+    dependsOn {
+        tasks.findAll {
+            task -> task.name.startsWith('jdepend')
+        }
+    }
+}
