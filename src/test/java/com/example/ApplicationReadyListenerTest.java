@@ -36,9 +36,8 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 public class ApplicationReadyListenerTest
 {
-    private Service config;
+    private Service service;
     private ApplicationReadyListener listener;
-    private Service otherConfig;
 
     @Mock
     private RestTemplate mockRestTemplate;
@@ -48,7 +47,7 @@ public class ApplicationReadyListenerTest
     {
         initMocks(this);
 
-        config = Service.builder().
+        service = Service.builder().
                 autoRedeploy(true).
                 linkedToService(ServiceLink.builder().
                         fromServiceUri("test").
@@ -62,7 +61,7 @@ public class ApplicationReadyListenerTest
                         build()).
                 build();
 
-        otherConfig = Service.builder().
+        Service otherService = Service.builder().
                 autoRedeploy(false).
                 targetNumberOfContainers(3).
                 build();
@@ -72,11 +71,11 @@ public class ApplicationReadyListenerTest
 
         when(mockRestTemplate.exchange(
                 eq("http://localhost/api/test"), same(GET), any(HttpEntity.class), same(Service.class))).
-                thenReturn(ResponseEntity.ok(config));
+                thenReturn(ResponseEntity.ok(service));
 
         when(mockRestTemplate.exchange(
                 eq("http://localhost/api/other"), same(GET), any(HttpEntity.class), same(Service.class))).
-                thenReturn(ResponseEntity.ok(otherConfig));
+                thenReturn(ResponseEntity.ok(otherService));
     }
 
 
@@ -147,7 +146,7 @@ public class ApplicationReadyListenerTest
     @Test
     public void shouldDoNothingIfAutoDeployIsNotEnabledOnService()
     {
-        config.setAutoRedeploy(false);
+        service.setAutoRedeploy(false);
 
         listener.onApplicationEvent(null);
 
@@ -160,8 +159,8 @@ public class ApplicationReadyListenerTest
     public void shouldValidateThatServiceHasLinkToLoadBalancer()
     {
         List<ServiceLink> linkedToServices = new ArrayList<>();
-        linkedToServices.add(config.getLinkedToServices().get(0));
-        config.setLinkedToServices(linkedToServices);
+        linkedToServices.add(service.getLinkedToServices().get(0));
+        service.setLinkedToServices(linkedToServices);
 
         listener.onApplicationEvent(null);
     }
@@ -170,8 +169,8 @@ public class ApplicationReadyListenerTest
     public void shouldValidateThatServiceHasLinkToOtherService()
     {
         List<ServiceLink> linkedToServices = new ArrayList<>();
-        linkedToServices.add(config.getLinkedToServices().get(1));
-        config.setLinkedToServices(linkedToServices);
+        linkedToServices.add(service.getLinkedToServices().get(1));
+        service.setLinkedToServices(linkedToServices);
 
         listener.onApplicationEvent(null);
     }
