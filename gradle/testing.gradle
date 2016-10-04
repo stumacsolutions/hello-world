@@ -1,5 +1,11 @@
+apply plugin: 'groovy'
 apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'jacoco'
+apply plugin: 'spring-cloud-contract'
+
+contracts {
+    packageWithBaseClasses = 'com.example.contracts.base'
+}
 
 jacoco {
     reportsDir = file("$buildDir/reports/testsCoverage")

@@ -1,5 +1,7 @@
 package com.example.contracts.base;
 
+import com.example.ApplicationController;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.Before;
 
 public class HelloBase
@@ -7,6 +9,6 @@ public class HelloBase
     @Before
     public void setup()
     {
-        // TODO: Implement setup method for tests.
+        RestAssuredMockMvc.standaloneSetup(new ApplicationController());
     }
 }

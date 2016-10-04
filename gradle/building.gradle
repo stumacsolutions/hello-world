@@ -1,7 +1,14 @@
+apply plugin: "io.spring.dependency-management"
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-contract-dependencies:1.0.0.RELEASE'
+    }
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'

@@ -1,4 +1,4 @@
-package contracts
+package hello
 
 org.springframework.cloud.contract.spec.Contract.make {
     request {
@@ -7,6 +7,6 @@ org.springframework.cloud.contract.spec.Contract.make {
     }
     response {
         status 200
-        body('Hello, World...')
+        body('Hello, World.')
     }
 }
