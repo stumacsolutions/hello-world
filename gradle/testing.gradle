@@ -36,6 +36,9 @@ test {
 }
 test.finalizedBy jacocoTestReport
 
+// required because checking.gradle triggers compilation before generation of contract tests
+compileTestJava.dependsOn generateContractTests
+
 task acceptanceTest(type: Test) {
     include '**/acceptance/**'
 }
